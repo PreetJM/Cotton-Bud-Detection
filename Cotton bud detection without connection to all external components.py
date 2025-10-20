@@ -1,0 +1,40 @@
+import cv2
+import numpy as np
+import time
+
+def find_cotton_bud(frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    edges = cv2.Canny(blurred, 50, 150)
+    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    for contour in contours:
+        epsilon = 0.02 * cv2.arcLength(contour, True)
+        approx = cv2.approxPolyDP(contour, epsilon, True)
+        
+        if len(approx) >= 5:
+            (x, y), radius = cv2.minEnclosingCircle(contour)
+            
+            if 40 < radius < 50:
+                cv2.circle(frame, (int(x), int(y)), int(radius), (0, 255, 0), 2)
+                coord_str = f"({int(x)}, {int(y)})"
+                print("Detected Cotton Bud at:", coord_str)
+
+    return frame
+
+cap = cv2.VideoCapture(0)
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("Failed to read from camera.")
+        break
+    
+    result_frame = find_cotton_bud(frame)
+    cv2.imshow('Cotton Bud Detection', result_frame)
+    
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
