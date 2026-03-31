@@ -7,22 +7,29 @@ It includes two versions of the code — one for pure webcam testing and another
 
 ## 🧩 Files Overview
 
-### 1. `cotton_without_ESP32.py`
+### 1. Webcam Version
+📄 [cotton_without_ESP32.py](cotton_without_ESP32.py)
+
 - Uses only a webcam.
 - Detects circular shapes (cotton buds) in real-time.
 - Draws a green circle around detected objects.
-- Ideal for computer-vision testing.
+- Suitable for testing and debugging computer vision logic.
 
-### 2. `cotton_with_ESP32.py`
-- Includes serial communication between Python and ESP32.
-- Sends detected coordinates `(x, y)` of the cotton bud to the ESP32.
-- Waits for acknowledgment (`ACK`) before continuing.
+---
+
+### 2. ESP32 Integrated Version
+📄 [cotton_with_ESP32.py](cotton_with_ESP32.py)
+
+- Uses serial communication (`pyserial`) to connect with ESP32.
+- Sends detected `(x, y)` coordinates of cotton buds.
+- Waits for acknowledgment (`ACK`) before processing the next frame.
+- Designed for real-time robotic applications.
 
 ---
 
 ## ⚙️ Requirements
-Install dependencies before running:
+
+Install dependencies:
 
 ```bash
 pip install opencv-python numpy pyserial
-
